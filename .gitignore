@@ -3,3 +3,6 @@ fzf
 history
 ssh
 system
+zsh/.zcompcache
+zsh/.zcompdump
+zsh/.zsh_history
