@@ -16,9 +16,12 @@ function fish_greeting
     # hyfetch
 end
 
-# Reload fish config
+# Reload all config files
 function reload
     source ~/.config/fish/config.fish
+    source ~/.config/tmux/tmux.conf
+    source ~/.config/alacritty/alacritty.toml
+    source ~/.config/helix/config.toml
 end
 
 # Modify history command to show date and time

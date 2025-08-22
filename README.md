@@ -24,3 +24,6 @@ git clone https://github.com/sophie-de-jong/dotfiles ~/.config
 ```
 bash ~/.config/install
 ```
+
+## Post-Installation
+If using fisher, you may want to run `fisher update` to install each plugin.
