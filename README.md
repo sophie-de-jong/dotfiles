@@ -26,6 +26,16 @@ git clone https://github.com/sophie-de-jong/dotfiles ~/.config
 bash ~/.config/install
 ```
 
+## Fish Theme/Prompt Config
+1. Select a prompt
+```console
+fish_config prompt save astronaut
+```
+2. Select a theme
+```console
+fish_config theme save "Catppuccin Mocha"
+```
+
 ## Fisher Installation (Fish Plugin Manager)
 1. Install fisher using
 ```console

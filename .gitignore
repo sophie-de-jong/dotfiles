@@ -2,7 +2,8 @@
 !alacritty/
 !fastfetch/
 !fish/
-!fish/**
+!fish/conf.d
+!fish/functions/fish_prompt.fish
 !git
 !helix
 !neofetch
