@@ -3,65 +3,91 @@
 This repository contains my configuration files (dotfiles) for various applications. 
 Currently includes configuration for:
 - Alacritty
-- Neofetch
-- Fastfetch
-- Hyfetch
+- Hyfetch/Fastfetch
 - Fish shell
 - Zoxide
 - Git
 - Helix
 - Tmux
-- XDG user directories and locale
 
-## General Installation (Arch Linux with Pacman)
-
-> ⚠️ Warning: Cloning into `~/.config` may overwrite your existing configuration files.
-
-1. Clone the repository:
+## General Installation
+Clone the repository:
 ```console
-git clone https://github.com/sophie-de-jong/dotfiles ~/.config
-```
-2. Run the install script:
-```console
-bash ~/.config/install
+git clone https://github.com/sophie-de-jong/dotfiles
 ```
 
-## Fish Theme/Prompt Config
-1. Select a prompt
+# Alacritty setup
+1. Install and link
+```console
+sudo pacman -S alacritty
+cd <dotfiles-directory>
+ln -s alacritty ~/.config/alacritty
+```
+2. Optionally add alacritty shortcut to Gnome
+```
+Settings > Keyboard > View and Customize Shortcuts > Custom Shortcuts > "+"
+```
+
+# Hyfetch/Fastfetch setup
+1. Install and link
+```console
+sudo pacman -S fastfetch hyfetch
+cd <dotfiles-directory>
+ln -s fastfetch ~/.config/fastfetch
+ln -s hyfetch.json ~/.config/hyfetch.json
+```
+
+# Fish setup
+1. Install and link
+```console
+sudo pacman -S fish
+cd <dotfiles-directory>
+ln -s fish ~/.config/fish
+```
+2. Install fisher
+```console
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+fisher update
+```
+3. Set theme and prompt
 ```console
 fish_config prompt save astronaut
-```
-2. Select a theme
-```console
 fish_config theme save "Catppuccin Mocha"
 ```
 
-## Fisher Installation (Fish Plugin Manager)
-1. Install fisher using
+# Zoxide setup
+1. Install
 ```console
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
-```
-2. Install/Update all plugins
-```console
-fisher update
+sudo pacman -S zoxide
 ```
 
-## TPM Installation (Tmux Plugin Manager)
-1. Install TPM by cloning the repository
+# Git setup
+1. Link
+```console
+ln -s git ~/.config/git
+```
+
+# Helix setup
+1. Install and link
+```console
+sudo pacman -S helix
+cd <dotfiles-directory>
+ln -s helix ~/.config/helix
+```
+
+# Tmux setup
+1. Install and link
+```console
+sudo pacman -S tmux
+cd <dotfiles-directory>
+ln -s tmux ~/.config/tmux
+```
+2. Install TPM and Catppuccin theme
 ```console
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+git clone -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
 ```
 2. Reload Tmux
 ```console
 reload
-```
-
-## Fzf Installation (Fuzzy Finding Tab Completion)
-1. Install fzf by cloning the repository
-```console
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.local/share/fzf
-```
-2. Run the install command
-```console
-~/.local/share/fzf/install --xdg --no-bash --no-zsh
 ```

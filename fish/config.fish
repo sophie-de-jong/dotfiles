@@ -1,4 +1,4 @@
-alias ll 'ls -l'
+alias ll 'ls -la'
 alias la 'ls -a'
 alias c wl-copy
 alias p wl-paste
@@ -18,10 +18,9 @@ end
 
 # Reload all config files
 function reload
+    tmux source ~/.config/tmux/tmux.conf
     source ~/.config/fish/config.fish
-    source ~/.config/tmux/tmux.conf
-    source ~/.config/alacritty/alacritty.toml
-    source ~/.config/helix/config.toml
+    touch ~/.config/alacritty/alacritty.toml
 end
 
 # Modify history command to show date and time
