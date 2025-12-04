@@ -1,1 +1,1 @@
-source "/home/sophie/.local/share/cargo/env.fish"
+sh "$XDG_DATA_HOME/cargo/env"
