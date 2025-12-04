@@ -76,7 +76,7 @@ function tmp
     cd ~/tmp/scratch/$dirname
 end
 
-function dotpush
+function dfsync
     if not set -q DOTFILES_DIR
         echo "DOTFILES_DIR is not set. Please set it in config.fish."
         return 1
@@ -89,6 +89,12 @@ function dotpush
 
     pushd $DOTFILES_DIR >/dev/null
 
+    # Update package list
+    if type -q pacman
+        pacman -Qqe >$DOTFILES_DIR/paclist # Official packges
+        pacman -Qqm >$DOTFILES_DIR/aurlist # AUR packages
+    end
+
     # Stage all changes
     git add -A
 
@@ -97,6 +103,7 @@ function dotpush
     set message "Update dotfiles: $date"
 
     git commit -m "$message"
+    git pull --rebase
     git push
 
     popd >/dev/null
