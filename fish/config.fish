@@ -50,11 +50,14 @@ function fish_greeting
 end
 
 function reload
-    cd $DOTFILES_DIR
+    pushd $DOTFILES_DIR >/dev/null
+
     source fish/config.fish
     tmux source tmux/tmux.conf
     touch alacritty/alacritty.toml
     stow -t ~/.config .
+
+    popd >/dev/null
 end
 
 function history
@@ -75,7 +78,7 @@ function tmp
     end
 
     mkdir -p ~/tmp/scratch/$dirname
-    cd ~/tmp/scratch/$dirname
+    pushd ~/tmp/scratch/$dirname
 end
 
 function dfsync
