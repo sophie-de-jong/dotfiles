@@ -92,11 +92,11 @@ function dotpush
     # Stage all changes
     git add -A
 
-    # Create a commit message 
-    set message "Update dotfiles: (date)"
+    # Create a commit message
+    set date (date "+%b %d, %Y %r")
+    set message "Update dotfiles: $date"
 
     git commit -m "$message"
-    git status
     git push
 
     popd >/dev/null
