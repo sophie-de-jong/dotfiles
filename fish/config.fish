@@ -46,13 +46,15 @@ bind ctrl-h backward-kill-word
 
 # Functions
 function fish_greeting
-    # hyfetch
+    neofetch
 end
 
 function reload
-    tmux source ~/.config/tmux/tmux.conf
-    source ~/.config/fish/config.fish
-    touch ~/.config/alacritty/alacritty.toml
+    cd $DOTFILES_DIR
+    source fish/config.fish
+    tmux source tmux/tmux.conf
+    touch alacritty/alacritty.toml
+    stow -t ~/.config .
 end
 
 function history
