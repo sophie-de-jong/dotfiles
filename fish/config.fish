@@ -9,7 +9,7 @@
 #
 # Modify the following variables to your own dotfiles path and repo:
 set -gx DOTFILES_DIR $HOME/dev/dotfiles
-set -gx DOTFILES_REPO ""
+set -gx DOTFILES_REPO "git@github.com:sophie-de-jong/dotfiles.git"
 
 set -gx NAME "Sophie de Jong"
 set -gx EMAIL "dejongmsophie@gmail.com"set -gx XDG_CONFIG_HOME $HOME/.config
@@ -111,8 +111,8 @@ function dfsync
     set message "Update dotfiles: $date"
 
     git commit -m "$message"
-    git pull --rebase
-    git push
+    git pull $DOTFILES_REPO main --rebase
+    git push $DOTFILES_REPO main
 
     popd >/dev/null
 end
