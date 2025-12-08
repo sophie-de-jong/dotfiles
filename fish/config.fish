@@ -6,16 +6,19 @@
 #
 # May want to run `xdg-ninja` periodically to scan $HOME for any dotfiles
 # that can safely be moved to XDG compliant directories.
-set -gx XDG_CONFIG_HOME $HOME/.config
+#
+# Modify the following variables to your own dotfiles path and repo:
+set -gx DOTFILES_DIR $HOME/dev/dotfiles
+set -gx DOTFILES_REPO ""
+
+set -gx NAME "Sophie de Jong"
+set -gx EMAIL "dejongmsophie@gmail.com"set -gx XDG_CONFIG_HOME $HOME/.config
+set -gx VISUAL helix
+set -gx EDITOR $VISUAL
 set -gx XDG_CACHE_HOME $HOME/.cache
 set -gx XDG_DATA_HOME $HOME/.local/share
 set -gx XDG_BIN_HOME $HOME/.local/bin
 set -gx XDG_STATE_HOME $HOME/.local/state
-set -gx VISUAL helix
-set -gx EDITOR $VISUAL
-set -gx NAME "Sophie de Jong"
-set -gx EMAIL "dejongmsophie@gmail.com"
-set -gx DOTFILES_DIR $HOME/dev/dotfiles
 set -gx RUSTUP_HOME $XDG_DATA_HOME/rustup
 set -gx CARGO_HOME $XDG_DATA_HOME/cargo
 set -gx CARGO_BIN $CARGO_HOME/bin
