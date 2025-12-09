@@ -100,7 +100,7 @@ function dfsync
 
     # Update package list
     if type -q pacman
-        pacman -Qqe >$DOTFILES_DIR/paclist # Official packges
+        pacman -Qqn >$DOTFILES_DIR/paclist # Official packges
         pacman -Qqm >$DOTFILES_DIR/aurlist # AUR packages
     end
 
