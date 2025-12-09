@@ -12,7 +12,7 @@ set -gx DOTFILES_DIR $HOME/dev/dotfiles
 set -gx DOTFILES_REPO "git@github.com:sophie-de-jong/dotfiles.git"
 
 set -gx NAME "Sophie de Jong"
-set -gx EMAIL "dejongmsophie@gmail.com"set -gx XDG_CONFIG_HOME $HOME/.config
+set -gx EMAIL "dejongmsophie@gmail.com"
 set -gx VISUAL helix
 set -gx EDITOR $VISUAL
 set -gx XDG_CONFIG_HOME $HOME/.config
