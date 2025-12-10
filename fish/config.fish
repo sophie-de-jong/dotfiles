@@ -33,8 +33,11 @@ set -gx DOTNET_CLI_HOME $XDG_DATA_HOME/dotnet
 set -gx LESSHISTFILE $XDG_STATE_HOME/lesshst
 # set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/startup.py
 set -gx PYTHON_HISTORY $XDG_CONFIG_HOME/python/python_history
+set -gx HISTFILE $XDG_STATE_HOME/bash/history
 set -gx GIT_CONFIG_GLOBAL $XDG_CONFIG_HOME/git/config
+set -gx GNUPGHOME $XDG_DATA_HOME/gnupg
 set -gx XAUTHORITY $XDG_RUNTIME_DIR/Xauthority
+set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 
 # Aliases
 alias ll 'ls -la'
