@@ -53,7 +53,9 @@ bind ctrl-h backward-kill-word
 
 # Functions
 function fish_greeting
-    neofetch
+    if status is-interactive
+        neofetch
+    end
 end
 
 function reload
