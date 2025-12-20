@@ -29,8 +29,10 @@ baobab
 base
 base-devel
 bash
+bat
 binutils
 bison
+blueprint-compiler
 bluez
 bluez-libs
 bluez-obex
@@ -95,10 +97,12 @@ evolution-data-server
 exempi
 exiv2
 expat
+eza
 faac
 faad2
 fakeroot
 fastfetch
+fd
 ffmpeg
 ffmpeg4.4
 fftw
@@ -144,6 +148,7 @@ github-cli
 gjs
 glib-networking
 glib2
+glib2-devel
 glibc
 glibmm-2.68
 glslang
@@ -192,6 +197,7 @@ gnulib-l10n
 gnupg
 gnutls
 go
+gobject-introspection
 gobject-introspection-runtime
 gom
 gperftools
@@ -365,6 +371,7 @@ libgdm
 libgee
 libgexiv2
 libgirepository
+libgit2
 libglvnd
 libgme
 libgoa
@@ -563,6 +570,7 @@ linux-firmware-whence
 linux-headers
 linux-lts
 linux-lts-headers
+llhttp
 llvm-libs
 lm_sensors
 lmdb
@@ -582,6 +590,7 @@ mbedtls
 md4c
 mdadm
 mesa
+meson
 minizip
 mjpegtools
 mkinitcpio
@@ -602,6 +611,7 @@ net-snmp
 nettle
 network-manager-applet
 networkmanager
+ninja
 nm-connection-editor
 noto-fonts-emoji
 npth
@@ -665,14 +675,28 @@ protobuf-c
 psmisc
 python
 python-argcomplete
+python-autocommand
 python-cairo
 python-dasbus
 python-dbus
 python-defusedxml
 python-gobject
+python-jaraco.collections
+python-jaraco.context
+python-jaraco.functools
+python-jaraco.text
+python-mako
+python-markdown
+python-markupsafe
+python-more-itertools
+python-packaging
+python-platformdirs
 python-psutil
 python-pyxdg
 python-setproctitle
+python-setuptools
+python-tqdm
+python-wheel
 qrencode
 qt5-base
 qt5-translations
@@ -682,6 +706,7 @@ qt6-translations
 raptor
 rav1e
 readline
+ripgrep
 rtkit
 rtmpdump
 rubberband
@@ -725,6 +750,7 @@ sudo
 sushi
 svt-av1
 svt-hevc
+syncthing
 systemd
 systemd-libs
 systemd-sysvcompat
@@ -741,6 +767,7 @@ tmux
 totem
 totem-pl-parser
 tpm2-tss
+tree
 tslib
 twolame
 tzdata

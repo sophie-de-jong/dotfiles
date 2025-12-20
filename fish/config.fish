@@ -40,8 +40,10 @@ set -gx XAUTHORITY $XDG_RUNTIME_DIR/Xauthority
 set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 
 # Aliases
-alias ll 'ls -la'
-alias la 'ls -a'
+alias ls 'eza --icons'
+alias ll 'eza --long --all --icons --git --header'
+alias lt 'eza --long --all --icons --git --header --tree'
+alias cat 'bat --paging=never'
 alias c wl-copy
 alias p wl-paste
 alias neofetch hyfetch
