@@ -43,7 +43,6 @@ set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 alias ls 'eza --icons'
 alias ll 'eza --long --all --icons --git --header'
 alias lt 'eza --long --all --icons --git --header --tree'
-alias cat 'bat --paging=never'
 alias c wl-copy
 alias p wl-paste
 alias neofetch hyfetch
