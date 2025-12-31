@@ -51,12 +51,14 @@ cairomm-1.16
 cdparanoia
 chromaprint
 cifs-utils
+cmake
 colord
 colord-gtk-common
 colord-gtk4
 colord-sane
 composefs
 coreutils
+cppdap
 cracklib
 cryptsetup
 cups-pk-helper
@@ -86,6 +88,7 @@ efibootmgr
 efivar
 egl-gbm
 egl-wayland
+egl-wayland2
 egl-x11
 eglexternalplatform
 electron37
@@ -257,6 +260,7 @@ gzip
 harfbuzz
 harfbuzz-icu
 helix
+helvum
 hicolor-icon-theme
 hidapi
 highway
@@ -284,6 +288,7 @@ jq
 js140
 json-c
 json-glib
+jsoncpp
 kbd
 keyutils
 kguiaddons
@@ -504,6 +509,7 @@ liburing
 libusb
 libusbmuxd
 libutempter
+libuv
 libva
 libva-nvidia-driver
 libvdpau
@@ -617,7 +623,7 @@ noto-fonts-emoji
 npth
 nspr
 nss
-nvidia-dkms
+nvidia-open-dkms
 nvidia-utils
 obsidian
 ocl-icd
@@ -646,6 +652,7 @@ pangomm-2.48
 papers
 parted
 patch
+pavucontrol
 pciutils
 pcre
 pcre2
@@ -695,17 +702,21 @@ python-psutil
 python-pyxdg
 python-setproctitle
 python-setuptools
+python-systemd
 python-tqdm
+python-typing_extensions
 python-wheel
 qrencode
 qt5-base
 qt5-translations
 qt6-base
 qt6-svg
+qt6-tools
 qt6-translations
 raptor
 rav1e
 readline
+rhash
 ripgrep
 rtkit
 rtmpdump
