@@ -52,6 +52,7 @@ abbr --add r source ~/.config/fish/config.fish
 abbr --add hx helix
 abbr --add cg cargo
 abbr --add dfs dotfiles-sync
+abbr --add dfa dotfiles-apply
 
 # Path
 fish_add_path $XDG_BIN_HOME
@@ -87,20 +88,32 @@ function tmp
     pushd ~/tmp/scratch/$dirname
 end
 
-function dotfiles-sync
+function dotfiles-apply
     if not test -d $DOTFILES_DIR
         echo "DOTFILES_DIR does not exist: $DOTFILES_DIR"
         return 1
     end
 
-    # Use provided name, otherwise hostname
-    if test (count $argv) -gt 0
-        set hostname $argv[1]
-    else
-        set hostname (uname -n)
+    stow -d $DOTFILES_DIR -t $HOME/.config .
+end
+
+function dotfiles-sync
+    if not test -d $DOTFILES_DIR/.git
+        echo "DOTFILES_DIR is not a git repository: $DOTFILES_DIR"
+        return 1
     end
 
-    set pkg_dir $DOTFILES_DIR/packages/$hostname
+    set -lx GIT_DIR $DOTFILES_DIR/.git
+    set -lx GIT_WORK_TREE $DOTFILES_DIR
+
+    # Use provided name, otherwise hostname
+    if test (count $argv) -gt 0
+        set machine $argv[1]
+    else
+        set machine (uname -n)
+    end
+
+    set pkg_dir $DOTFILES_DIR/packages/$machine
     mkdir -p $pkg_dir
 
     # Update package list
@@ -109,22 +122,17 @@ function dotfiles-sync
         pacman -Qqm >$pkg_dir/aur
     end
 
-    # Stage all changes
-    pushd $DOTFILES_DIR >/dev/null
-    git add -A
+    # Stage new changes
+    git add -A; or return $status
 
-    # Create a commit message
-    set date (date "+%b %d, %Y %r")
-    set message "Update dotfiles: $date"
-
-    if not git diff --cached --quiet
-        git commit -m "$message"
+    # Commit new changes
+    if not git diff --cached --q
+        set date (date "+%b %d, %Y %r")
+        git commit -m "Update dotfiles: $date"; or return $status
     else
         echo "No changes to commit"
     end
 
-    git pull $DOTFILES_REPO main --rebase
-    git push $DOTFILES_REPO main
-
-    popd >/dev/null
+    git pull --rebase; or return $status
+    git push; or return $status
 end

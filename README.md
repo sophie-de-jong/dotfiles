@@ -1,69 +1,88 @@
 # Sophie's Dotfiles
 
-This repository contains my configuration files (dotfiles) for various applications. It also has the following functionality:
-- automatically syncing the repo (`dfsync`)
-- automatically generate package lists (`paclist` + `aurlist`)
-- automatically symlink everything into `~/.config` (`stow`)
+This repository contains my configuration files (dotfiles) for various applications.
+
+It also provides a few helper commands:
+
+- `dotfiles-apply`: apply dotfiles to `~/.config` using GNU Stow
+- `dotfiles-sync`: export machine-specific package lists and sync changes with git
 
 Currently includes configuration for:
+
 - Alacritty
 - Hyfetch/Fastfetch
 - Fish shell
 - Zoxide
 - Git
 - Helix
-- Tmux
+- Tmux (deprecated)
 
 ## Installation
-### 1. Clone the repository:
+
+### 1. Clone the repository
+
 ```bash
 git clone https://github.com/sophie-de-jong/dotfiles
-```
-
-### 2. Link to `~/.config`
-```bash
 cd dotfiles
-stow -t ~/.config .
-```
-Then reload the terminal window
-
-### 3. Install packages (Arch Linux only)
-Official repository pacakges:
-```bash
-sudo pacman -S --needed - < paclist
-```
-AUR packages (yay)
-```bash
-yay -S --needed - < aurlist
 ```
 
-### 4. Shell setup (Fish)
+### 2. Install GNU Stow (if not installed)
+
 ```bash
-sudo pacman -S fish
-chsh -s /usr/bin/fish
-```
-Install fisher:
-```bash
-curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
-fisher update
-```
-(Optional) Set theme/prompt:
-```bash
-fish_config prompt save astronaut
-fish_config theme save "Catppuccin Mocha"
+sudo pacman -S stow
 ```
 
-### 5. Terminal multiplexer setup (Tmux)
+### 3. Apply dotfiles
+
 ```bash
-sudo pacman -S tmux
+dotfiles-apply
 ```
-Install TPM and Catppuccin theme
-```bash
-git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-git clone -b v2.1.3 https://github.com/catppuccin/tmux.git ~/.config/tmux/plugins/catppuccin/tmux
+
+This will symlink the configuration files into `~/.config`.
+
+Restart your terminal afterwards. You may have to run `chsh -s /usr/bin/fish` to make fish the default terminal.
+
+## Installing packages (Arch Linux only)
+
+Package lists are stored per machine:
+
+```text
+packages/
+└── <hostname>/
+    ├── pacman
+    └── aur
 ```
-Install packages and reload Tmux
+
+Install official repository packages:
+
 ```bash
-<prefix> + I
-reload
+sudo pacman -S --needed - < packages/$(uname -n)/pacman
+```
+
+Install AUR packages (using yay):
+
+```bash
+yay -S --needed - < packages/$(uname -n)/aur
+```
+
+## Updating dotfiles
+
+After making changes:
+
+```fish
+dotfiles-sync
+```
+
+This will:
+
+1. Update the package list for the current machine
+2. Stage changes
+3. Commit changes
+4. Pull remote changes with rebase
+5. Push updates
+
+To store packages under a different machine name:
+
+```fish
+dotfiles-sync laptop
 ```
