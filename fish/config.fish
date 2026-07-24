@@ -11,21 +11,19 @@
 set -gx DOTFILES_DIR $HOME/dev/dotfiles
 set -gx DOTFILES_REPO "git@github.com:sophie-de-jong/dotfiles.git"
 
-set -gx NAME "Sophie de Jong"
-set -gx EMAIL "dejongmsophie@gmail.com"
-set -gx VISUAL helix
-set -gx EDITOR $VISUAL
+set -Ux NAME "Sophie de Jong"
+set -Ux EMAIL "dejongmsophie@gmail.com"
+set -Ux VISUAL helix
+set -Ux EDITOR $VISUAL
+
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx XDG_CACHE_HOME $HOME/.cache
 set -gx XDG_DATA_HOME $HOME/.local/share
 set -gx XDG_BIN_HOME $HOME/.local/bin
 set -gx XDG_STATE_HOME $HOME/.local/state
+
 set -gx RUSTUP_HOME $XDG_DATA_HOME/rustup
 set -gx CARGO_HOME $XDG_DATA_HOME/cargo
-set -gx CARGO_BIN $CARGO_HOME/bin
-set -gx CARGO_TARGET_DIR $XDG_CACHE_HOME/cargo-target
-set -gx CARGO_RELEASE_DIR $CARGO_TARGET_DIR/release
-set -gx CARGO_ARTIFACTS_DIR $CARGO_RELEASE_DIR/artifacts
 set -gx GOPATH $XDG_DATA_HOME/go
 set -gx NPM_CONFIG_USERCONFIG $XDG_CONFIG_HOME/npm/npmrc
 set -gx NODE_REPL_HISTORY $XDG_DATA_HOME/node_repl_history
@@ -41,14 +39,22 @@ set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 
 # Aliases
 alias ls 'eza --icons'
-alias ll 'eza --long --all --icons --git --header'
 alias lt 'eza --long --all --icons --git --header --tree'
+alias ll 'eza --long --all --icons --git --header'
 alias cat 'bat --paging=never'
-alias c wl-copy
-alias p wl-paste
 alias neofetch hyfetch
-alias hx helix
-alias files 'xdg-open .'
+
+# Abbreviations
+abbr --add c wl-copy
+abbr --add p wl-paste
+abbr --add g git
+abbr --add r source ~/.config/fish/config.fish
+abbr --add hx helix
+abbr --add cg cargo
+abbr --add dfs dotfiles-sync
+
+# Path
+fish_add_path $XDG_BIN_HOME
 
 # Bindings
 bind ctrl-h backward-kill-word
@@ -58,17 +64,6 @@ function fish_greeting
     if status is-interactive
         neofetch
     end
-end
-
-function reload
-    pushd $DOTFILES_DIR >/dev/null
-
-    source fish/config.fish
-    tmux source tmux/tmux.conf
-    touch alacritty/alacritty.toml
-    stow -t ~/.config .
-
-    popd >/dev/null
 end
 
 function history
@@ -83,7 +78,7 @@ function tmp
     set date (date +%Y-%m-%d)
 
     if test (count $argv) -gt 0
-        set dirname "$date-$argv"
+        set dirname "$date-"(string join "-" $argv)
     else
         set dirname "$date"
     end
@@ -92,33 +87,42 @@ function tmp
     pushd ~/tmp/scratch/$dirname
 end
 
-function dfsync
-    if not set -q DOTFILES_DIR
-        echo "DOTFILES_DIR is not set. Please set it in config.fish."
-        return 1
-    end
-
+function dotfiles-sync
     if not test -d $DOTFILES_DIR
-        echo "DOTFILES_DIR does not point to a valid directory: $DOTFILES_DIR"
+        echo "DOTFILES_DIR does not exist: $DOTFILES_DIR"
         return 1
     end
 
-    pushd $DOTFILES_DIR >/dev/null
+    # Use provided name, otherwise hostname
+    if test (count $argv) -gt 0
+        set hostname $argv[1]
+    else
+        set hostname (uname -n)
+    end
+
+    set pkg_dir $DOTFILES_DIR/packages/$hostname
+    mkdir -p $pkg_dir
 
     # Update package list
     if type -q pacman
-        pacman -Qqn >$DOTFILES_DIR/paclist # Official packges
-        pacman -Qqm >$DOTFILES_DIR/aurlist # AUR packages
+        pacman -Qqn >$pkg_dir/pacman
+        pacman -Qqm >$pkg_dir/aur
     end
 
     # Stage all changes
+    pushd $DOTFILES_DIR >/dev/null
     git add -A
 
     # Create a commit message
     set date (date "+%b %d, %Y %r")
     set message "Update dotfiles: $date"
 
-    git commit -m "$message"
+    if not git diff --cached --quiet
+        git commit -m "$message"
+    else
+        echo "No changes to commit"
+    end
+
     git pull $DOTFILES_REPO main --rebase
     git push $DOTFILES_REPO main
 

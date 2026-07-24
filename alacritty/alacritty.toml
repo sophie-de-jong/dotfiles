@@ -14,10 +14,6 @@ opacity = 0.75
 shape = "Underline"
 blinking = "On"
 
-[terminal.shell]
-program = "/usr/bin/tmux"
-args = ["new", "-A", "-D", "-s", "main"]
-
 # Catppuccin colours
 [colors.primary]
 background = "#1e1e2e"
