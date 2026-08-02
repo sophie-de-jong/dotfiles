@@ -6,21 +6,16 @@
 #
 # May want to run `xdg-ninja` periodically to scan $HOME for any dotfiles
 # that can safely be moved to XDG compliant directories.
-#
-# Modify the following variables to your own dotfiles path and repo:
-set -gx DOTFILES_DIR $HOME/dev/dotfiles
-set -gx DOTFILES_REPO "git@github.com:sophie-de-jong/dotfiles.git"
-
-set -Ux NAME "Sophie de Jong"
-set -Ux EMAIL "dejongmsophie@gmail.com"
-set -Ux VISUAL helix
-set -Ux EDITOR $VISUAL
+set -gx NAME "Sophie de Jong"
+set -gx EMAIL "dejongmsophie@gmail.com"
+set -gx VISUAL helix
+set -gx EDITOR $VISUAL
 
 set -gx XDG_CONFIG_HOME $HOME/.config
 set -gx XDG_CACHE_HOME $HOME/.cache
 set -gx XDG_DATA_HOME $HOME/.local/share
-set -gx XDG_BIN_HOME $HOME/.local/bin
 set -gx XDG_STATE_HOME $HOME/.local/state
+set -gx XDG_BIN_HOME $HOME/.local/bin
 
 set -gx RUSTUP_HOME $XDG_DATA_HOME/rustup
 set -gx CARGO_HOME $XDG_DATA_HOME/cargo
@@ -37,6 +32,9 @@ set -gx GNUPGHOME $XDG_DATA_HOME/gnupg
 set -gx XAUTHORITY $XDG_RUNTIME_DIR/Xauthority
 set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 
+# PATH entries
+fish_add_path $XDG_BIN_HOME
+
 # Aliases
 alias ls 'eza --icons'
 alias lt 'eza --long --all --icons --git --header --tree'
@@ -48,91 +46,9 @@ alias neofetch hyfetch
 abbr --add c wl-copy
 abbr --add p wl-paste
 abbr --add g git
-abbr --add r source ~/.config/fish/config.fish
+abbr --add r source $XDG_CONFIG_HOME/fish/config.fish
 abbr --add hx helix
 abbr --add cg cargo
-abbr --add dfs dotfiles-sync
-abbr --add dfa dotfiles-apply
-
-# Path
-fish_add_path $XDG_BIN_HOME
 
 # Bindings
 bind ctrl-h backward-kill-word
-
-# Functions
-function fish_greeting
-    if status is-interactive
-        neofetch
-    end
-end
-
-function history
-    builtin history --show-time='%F %T '
-end
-
-function backup --argument filename
-    cp -r $filename $filename.bak
-end
-
-function tmp
-    set date (date +%Y-%m-%d)
-
-    if test (count $argv) -gt 0
-        set dirname "$date-"(string join "-" $argv)
-    else
-        set dirname "$date"
-    end
-
-    mkdir -p ~/tmp/scratch/$dirname
-    pushd ~/tmp/scratch/$dirname
-end
-
-function dotfiles-apply
-    if not test -d $DOTFILES_DIR
-        echo "DOTFILES_DIR does not exist: $DOTFILES_DIR"
-        return 1
-    end
-
-    stow -d $DOTFILES_DIR -t $HOME/.config .
-end
-
-function dotfiles-sync
-    if not test -d $DOTFILES_DIR/.git
-        echo "DOTFILES_DIR is not a git repository: $DOTFILES_DIR"
-        return 1
-    end
-
-    set -lx GIT_DIR $DOTFILES_DIR/.git
-    set -lx GIT_WORK_TREE $DOTFILES_DIR
-
-    # Use provided name, otherwise hostname
-    if test (count $argv) -gt 0
-        set machine $argv[1]
-    else
-        set machine (uname -n)
-    end
-
-    set pkg_dir $DOTFILES_DIR/packages/$machine
-    mkdir -p $pkg_dir
-
-    # Update package list
-    if type -q pacman
-        pacman -Qqn >$pkg_dir/pacman
-        pacman -Qqm >$pkg_dir/aur
-    end
-
-    # Stage new changes
-    git add -A; or return $status
-
-    # Commit new changes
-    if not git diff --cached --q
-        set date (date "+%b %d, %Y %r")
-        git commit -m "Update dotfiles: $date"; or return $status
-    else
-        echo "No changes to commit"
-    end
-
-    git pull --rebase; or return $status
-    git push; or return $status
-end
