@@ -36,11 +36,9 @@ set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 fish_add_path $XDG_BIN_HOME
 
 # Aliases
-alias ls 'eza --icons'
-alias lt 'eza --long --all --icons --git --header --tree'
-alias ll 'eza --long --all --icons --git --header'
+alias ls eza
+alias ll 'eza -la'
 alias cat 'bat --paging=never'
-alias neofetch hyfetch
 
 # Abbreviations
 abbr --add c wl-copy
@@ -52,3 +50,76 @@ abbr --add cg cargo
 
 # Bindings
 bind ctrl-h backward-kill-word
+
+# Functions
+set -U fish_greeting ""
+
+function history
+    builtin history --show-time='%F %T '
+end
+
+function backup --argument filename
+    cp -r $filename $filename.bak
+end
+
+function tmp
+    set date (date +%Y-%m-%d)
+
+    if test (count $argv) -gt 0
+        set dirname "$date-"(string join "-" $argv)
+    else
+        set dirname "$date"
+    end
+
+    mkdir -p ~/tmp/scratch/$dirname
+    pushd ~/tmp/scratch/$dirname
+end
+
+function dotfiles-apply
+    if not test -d $DOTFILES_DIR
+        echo "DOTFILES_DIR does not exist: $DOTFILES_DIR"
+        return 1
+    end
+
+    stow -d $DOTFILES_DIR -t $HOME/.config .
+end
+
+function dotfiles-sync
+    if not test -d $DOTFILES_DIR/.git
+        echo "DOTFILES_DIR is not a git repository: $DOTFILES_DIR"
+        return 1
+    end
+
+    set -lx GIT_DIR $DOTFILES_DIR/.git
+    set -lx GIT_WORK_TREE $DOTFILES_DIR
+
+    # Use provided name, otherwise hostname
+    if test (count $argv) -gt 0
+        set machine $argv[1]
+    else
+        set machine (uname -n)
+    end
+
+    set pkg_dir $DOTFILES_DIR/packages/$machine
+    mkdir -p $pkg_dir
+
+    # Update package list
+    if type -q pacman
+        pacman -Qqn >$pkg_dir/pacman
+        pacman -Qqm >$pkg_dir/aur
+    end
+
+    # Stage new changes
+    git add -A; or return $status
+
+    # Commit new changes
+    if not git diff --cached --q
+        set date (date "+%b %d, %Y %r")
+        git commit -m "Update dotfiles: $date"; or return $status
+    else
+        echo "No changes to commit"
+    end
+
+    git pull --rebase; or return $status
+    git push; or return $status
+end
