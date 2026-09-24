@@ -24,13 +24,13 @@ set -gx NPM_CONFIG_USERCONFIG $XDG_CONFIG_HOME/npm/npmrc
 set -gx NODE_REPL_HISTORY $XDG_DATA_HOME/node_repl_history
 set -gx DOTNET_CLI_HOME $XDG_DATA_HOME/dotnet
 set -gx LESSHISTFILE $XDG_STATE_HOME/lesshst
-# set -gx PYTHONSTARTUP $XDG_CONFIG_HOME/python/startup.py
 set -gx PYTHON_HISTORY $XDG_CONFIG_HOME/python/python_history
 set -gx HISTFILE $XDG_STATE_HOME/bash/history
 set -gx GIT_CONFIG_GLOBAL $XDG_CONFIG_HOME/git/config
 set -gx GNUPGHOME $XDG_DATA_HOME/gnupg
 set -gx XAUTHORITY $XDG_RUNTIME_DIR/Xauthority
 set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
+set -gx EZA_ICONS_AUTO 1
 
 # PATH entries
 fish_add_path $XDG_BIN_HOME
@@ -50,76 +50,3 @@ abbr --add cg cargo
 
 # Bindings
 bind ctrl-h backward-kill-word
-
-# Functions
-set -U fish_greeting ""
-
-function history
-    builtin history --show-time='%F %T '
-end
-
-function backup --argument filename
-    cp -r $filename $filename.bak
-end
-
-function tmp
-    set date (date +%Y-%m-%d)
-
-    if test (count $argv) -gt 0
-        set dirname "$date-"(string join "-" $argv)
-    else
-        set dirname "$date"
-    end
-
-    mkdir -p ~/tmp/scratch/$dirname
-    pushd ~/tmp/scratch/$dirname
-end
-
-function dotfiles-apply
-    if not test -d $DOTFILES_DIR
-        echo "DOTFILES_DIR does not exist: $DOTFILES_DIR"
-        return 1
-    end
-
-    stow -d $DOTFILES_DIR -t $HOME/.config .
-end
-
-function dotfiles-sync
-    if not test -d $DOTFILES_DIR/.git
-        echo "DOTFILES_DIR is not a git repository: $DOTFILES_DIR"
-        return 1
-    end
-
-    set -lx GIT_DIR $DOTFILES_DIR/.git
-    set -lx GIT_WORK_TREE $DOTFILES_DIR
-
-    # Use provided name, otherwise hostname
-    if test (count $argv) -gt 0
-        set machine $argv[1]
-    else
-        set machine (uname -n)
-    end
-
-    set pkg_dir $DOTFILES_DIR/packages/$machine
-    mkdir -p $pkg_dir
-
-    # Update package list
-    if type -q pacman
-        pacman -Qqn >$pkg_dir/pacman
-        pacman -Qqm >$pkg_dir/aur
-    end
-
-    # Stage new changes
-    git add -A; or return $status
-
-    # Commit new changes
-    if not git diff --cached --q
-        set date (date "+%b %d, %Y %r")
-        git commit -m "Update dotfiles: $date"; or return $status
-    else
-        echo "No changes to commit"
-    end
-
-    git pull --rebase; or return $status
-    git push; or return $status
-end
