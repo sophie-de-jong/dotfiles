@@ -25,12 +25,15 @@ set -gx NODE_REPL_HISTORY $XDG_DATA_HOME/node_repl_history
 set -gx DOTNET_CLI_HOME $XDG_DATA_HOME/dotnet
 set -gx LESSHISTFILE $XDG_STATE_HOME/lesshst
 set -gx PYTHON_HISTORY $XDG_CONFIG_HOME/python/python_history
+set -gx JULIA_DEPOT_PATH $XDG_DATA_HOME/julia $JULIA_DEPOT_PATH
+set -gx JULIAUP_DEPOT_PATH $XDG_DATA_HOME/julia
 set -gx HISTFILE $XDG_STATE_HOME/bash/history
 set -gx GIT_CONFIG_GLOBAL $XDG_CONFIG_HOME/git/config
 set -gx GNUPGHOME $XDG_DATA_HOME/gnupg
 set -gx XAUTHORITY $XDG_RUNTIME_DIR/Xauthority
 set -gx CUDA_CACHE_PATH $XDG_CACHE_HOME/nv
 set -gx EZA_ICONS_AUTO 1
+set -gx LIBVIRT_DEFAULT_URI qemu:///system
 
 # PATH entries
 fish_add_path $XDG_BIN_HOME
